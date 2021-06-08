@@ -1,9 +1,9 @@
 {
-    "name": "alexandr/video-duration-counter",
+    "name": "tillpaid/video-duration-counter",
     "authors": [
         {
             "name": "Alexandr Maiboroda",
-            "email": "maiboroda@evergreens.in.ua"
+            "email": "tillpaid@gmail.com"
         }
     ],
     "require": {
