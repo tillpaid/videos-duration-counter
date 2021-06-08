@@ -1,0 +1,4 @@
+.idea
+TempFiles/cache.json
+.env
+vendor/

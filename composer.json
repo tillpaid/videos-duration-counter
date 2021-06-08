@@ -1,0 +1,16 @@
+{
+    "name": "alexandr/video-duration-counter",
+    "authors": [
+        {
+            "name": "Alexandr Maiboroda",
+            "email": "maiboroda@evergreens.in.ua"
+        }
+    ],
+    "require": {
+        "james-heinrich/getid3": "^1.9",
+        "symfony/dotenv": "^5.3"
+    },
+    "autoload": {
+        "classmap": ["Classes"]
+    }
+}
