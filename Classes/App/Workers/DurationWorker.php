@@ -38,20 +38,31 @@ class DurationWorker
 		$this->startTime = time();
 		$this->processAll = array_sum(array_map('count', $files));
 		$processCounter = 0;
+		$cacheCounter = 0;
 
-		foreach ($files as $channelName => $channelFiles) {
-			foreach ($channelFiles as $channelFile) {
-				$this->processFile($filesDuration, $channelName, $channelFile);
-
-				$processCounter++;
-				$this->printStatus($processCounter);
-			}
-		}
+		$this->processFile($files, $filesDuration, $processCounter, true, $cacheCounter);
+		$this->processFile($files, $filesDuration, $processCounter, false, $cacheCounter);
 
 		return $filesDuration;
 	}
 
-	private function processFile(&$filesDuration, $channelName, $channelFile)
+	private function processFile($files, &$filesDuration, &$processCounter, $inCache, &$cacheCounter)
+	{
+		foreach ($files as $channelName => $channelFiles) {
+			foreach ($channelFiles as $channelFile) {
+				if (array_key_exists($channelFile, $this->cacheWorker->cache) == $inCache) {
+					$this->addFileInfo($filesDuration, $channelName, $channelFile);
+
+					$processCounter++;
+					$inCache && $cacheCounter++;
+
+					$this->printStatus($processCounter, $cacheCounter);
+				}
+			}
+		}
+	}
+
+	private function addFileInfo(&$filesDuration, $channelName, $channelFile)
 	{
 		if (!array_key_exists($channelName, $filesDuration)) {
 			$filesDuration[$channelName] = 0;
@@ -69,10 +80,11 @@ class DurationWorker
 		}
 	}
 
-	private function printStatus($processCounter)
+	private function printStatus($processCounter, $cacheCounter)
 	{
 		$duration = time() - $this->startTime;
-		$durationPerFile = $duration / $processCounter;
+		$totalCounter = $processCounter - $cacheCounter;
+		$durationPerFile = $totalCounter ? $duration / $totalCounter : 0;
 		$left = ceil($durationPerFile * ($this->processAll - $processCounter));
 
 		$durationTime = $this->timeWorker->secondsToString($duration);
