@@ -39,7 +39,7 @@ class TableWorker
 		$avg = $this->timeWorker->secondsToString($duration / $count);
 
 		// It's wrong 'Й' char, I don't know about it, but it's break table spacing
-		$channel = str_replace(['Й', 'й'], ['Й', 'й'], $channel);
+		$channel = str_replace(['Й', 'й', 'ё'], ['Й', 'й', 'ё'], $channel);
 
 		$this->table->addRow([$channel, $durationTime, $count, $avg]);
 	}
